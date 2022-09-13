@@ -266,3 +266,25 @@ person.age = 29 是修改引用对象的成员 age，这题最后一行代码 pe
 3.闭包引用，person 的值已经被改变，指向结构体 Person{29}，所以输出 29.
 
 由于 defer 的执行顺序为先进后出，即 3 2 1，所以输出 29 28 28。
+
+**终极神题！**
+
+```go
+func F(n int) func() int {
+    return func() int {
+        n++
+        return n
+    }
+}
+
+func main() {
+    f := F(5)
+    defer func() {
+        fmt.Println(f())//闭包第三次执行（defer闭包引用）
+    }()
+    defer fmt.Println(f())//闭包第一次执行（defer参数传递）
+    i := f()
+    fmt.Println(i)//闭包第二次执行
+}
+//7 6 8
+```
